@@ -17,7 +17,11 @@ for i in range(len(data)):
     except:pass
 #print(data)
 account=open("계정.txt","r").read().split()
+login=Erequests(True,"{\"query\":\"mutation($username:String!,$password:String!,$rememberme:Boolean,$captchaValue:String,$captchaKey:String,$captchaType:String){signinByUsername(username:$username,password:$password,rememberme:$rememberme,captchaValue:$captchaValue,captchaKey:$captchaKey,captchaType:$captchaType){id nickname role isEmailAuth}}\",\"variables\":{\"username\":\""+account[0]+"\",\"password\":\""+account[1]+"\",\"rememberme\":true}}")
+print("로그인:",login)
 while 1:
+    try:Erequests(True,"{\"query\":\"query CHECK_FOLLOW($user:String!){checkFollow(user:$user){isFollow}}\",\"variables\":{\"user\":\"565fdb0d1328dea8087009b5\"}}")
+    except:pass
     data=open("data.txt","r").read().split("\n")
     for i in range(len(data)):
         data[i]=data[i].split("")
@@ -54,10 +58,17 @@ while 1:
                 except:pass
             try:
                 outString=output[random.randrange(0,len(output))]
-                login=Erequests(True,"{\"query\":\"mutation($username:String!,$password:String!,$rememberme:Boolean,$captchaValue:String,$captchaKey:String,$captchaType:String){signinByUsername(username:$username,password:$password,rememberme:$rememberme,captchaValue:$captchaValue,captchaKey:$captchaKey,captchaType:$captchaType){id nickname role isEmailAuth}}\",\"variables\":{\"username\":\""+account[0]+"\",\"password\":\""+account[1]+"\"}}")
-                asdf=Erequests(True,"{\"query\":\"mutation CREATE_COMMENT($content:String$image:String$sticker:String$target:String$targetSubject:String$targetType:String$groupId:ID){createComment(content:$content image:$image sticker:$sticker target:$target targetSubject:$targetSubject targetType:$targetType groupId:$groupId){warning}}\",\"variables\":{\"content\":\"[챗봇 테스트중] "+outString+"\",\"target\":\""+articleDatas["id"]+"\",\"targetSubject\":\"discuss\",\"targetType\":\"individual\"}}")
-                print("로그인:",login)
+                #login=Erequests(True,"{\"query\":\"mutation($username:String!,$password:String!,$rememberme:Boolean,$captchaValue:String,$captchaKey:String,$captchaType:String){signinByUsername(username:$username,password:$password,rememberme:$rememberme,captchaValue:$captchaValue,captchaKey:$captchaKey,captchaType:$captchaType){id nickname role isEmailAuth}}\",\"variables\":{\"username\":\""+account[0]+"\",\"password\":\""+account[1]+"\"}}")
+                asdf=Erequests(True,"{\"query\":\"mutation CREATE_COMMENT($content:String$image:String$sticker:String$target:String$targetSubject:String$targetType:String$groupId:ID){createComment(content:$content image:$image sticker:$sticker target:$target targetSubject:$targetSubject targetType:$targetType groupId:$groupId){warning}}\",\"variables\":{\"content\":\""+outString+"\",\"target\":\""+articleDatas["id"]+"\",\"targetSubject\":\"discuss\",\"targetType\":\"individual\"}}")
+                #print("로그인:",login)
                 print("글적기:",asdf)
+                try:
+                    if asdf["errors"]==[{}]:
+                        login=Erequests(True,"{\"query\":\"mutation($username:String!,$password:String!,$rememberme:Boolean,$captchaValue:String,$captchaKey:String,$captchaType:String){signinByUsername(username:$username,password:$password,rememberme:$rememberme,captchaValue:$captchaValue,captchaKey:$captchaKey,captchaType:$captchaType){id nickname role isEmailAuth}}\",\"variables\":{\"username\":\""+account[0]+"\",\"password\":\""+account[1]+"\"}}")
+                        print("로그인:",login)
+                        asdf=Erequests(True,"{\"query\":\"mutation CREATE_COMMENT($content:String$image:String$sticker:String$target:String$targetSubject:String$targetType:String$groupId:ID){createComment(content:$content image:$image sticker:$sticker target:$target targetSubject:$targetSubject targetType:$targetType groupId:$groupId){warning}}\",\"variables\":{\"content\":\""+outString+"\",\"target\":\""+articleDatas["id"]+"\",\"targetSubject\":\"discuss\",\"targetType\":\"individual\"}}")
+                        print("글적기:",asdf)
+                except:pass
                 read=open("articleRead.txt","a")
                 read.write(articleDatas["id"]+"\n")
                 readData.append(articleDatas["id"])
